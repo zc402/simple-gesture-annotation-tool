@@ -32,16 +32,22 @@ class LabelUtils:
         return self.__labels[item]
 
     def __load(self):
+
+        cap = cv2.VideoCapture(self.__video_path)
+        num_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+        cap.release()
+
         if self.__csv_path.exists():
             with open(self.__csv_path, 'r', newline='') as csv_file:
                 label_reader = csv.reader(csv_file)
-                return list(label_reader)[0]
+                labels = list(label_reader)[0]
         else:
             # Create new csv file
-            __cap = cv2.VideoCapture(self.__video_path)
-            num_frames = int(__cap.get(cv2.CAP_PROP_FRAME_COUNT))
             labels = [0] * num_frames
-            return labels
+
+        if len(labels) != num_frames:
+            raise ValueError('Video contains %d frames but csv contains %d labels' % (num_frames, len(labels)))
+        return labels
 
     def __save(self):
         with open(self.__csv_path, 'w', newline='') as csv_file:
@@ -268,7 +274,7 @@ class MainW(QMainWindow):
         openFile.triggered.connect(self.__show_file_dialog)
 
         # TODO: This is a short cut for debugging
-        self.__init_grids(r'C:\Users\zc\PoliceGestureLong\train\001.mp4')
+        self.__init_grids(r'C:\Users\zc\Documents\005.mp4')
         self.show()
 
     def __to_center(self):
