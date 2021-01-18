@@ -1,6 +1,7 @@
 from pathlib import Path
 
-from PyQt5.QtCore import QPoint
+
+from PyQt5.QtCore import QPoint, Qt
 from PyQt5.QtGui import QWheelEvent, QIcon
 from PyQt5.QtWidgets import QFileDialog, QDesktopWidget, QMainWindow, QAction
 
@@ -59,8 +60,11 @@ class MainW(QMainWindow):
         if self.thumbs_manager is None:
             event.ignore()
             return
-
-        print(event.key())
+        key = event.key()
+        if Qt.Key_Space <= key <= Qt.Key_AsciiTilde:
+            # handle ASCII char like keys
+            keyString = chr(key)
+            print(keyString)
 
     def wheelEvent(self, event: QWheelEvent):
 
