@@ -2,6 +2,8 @@ from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QStackedLayout, QFrame
 
+from ui.color_palette import ColorPalette
+
 
 class ThumbnailWidget(QFrame):
     """Widget containing a thumbnail and a label of 1 video frame"""
@@ -46,6 +48,8 @@ class ThumbnailWidget(QFrame):
 
     def set_label(self, text: str):
         self.__label_holder.setText(text)
+        color_style = "QLabel {background-color : rgb(%d, %d, %d); border: 0px;}" % tuple(ColorPalette.get_rgb(text))
+        self.__label_holder.setStyleSheet(color_style)
 
     def set_selection_border(self, selected: bool):
         if selected:
