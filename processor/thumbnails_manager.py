@@ -22,6 +22,7 @@ class ThumbnailsManager:
         self.num_columns = num_columns
 
     def show_next(self):
+        """Show next frames, called when mouse scrolls down"""
         if self.__last_widget_idx() < self.__video_loader.num_frames - 1:
             self.__vidx_first_widget = self.__vidx_first_widget + \
                                        self.__interval * self.num_columns
@@ -30,12 +31,15 @@ class ThumbnailsManager:
             print('End of the video')
 
     def show_previous(self):
+        """Show previous frames, called when mouse scrolls up"""
         if self.__vidx_first_widget > 0:
             self.__vidx_first_widget = self.__vidx_first_widget - self.num_columns
         self.refresh_draw()
 
     def handle_click(self, widget_idx):
-        """widget_index: index of clicked widget, for example 0~32"""
+        """ Handle selection prompt after a widget was clicked
+        widget_index: index of clicked widget, for example 0~32
+        """
         video_idx = self.__video_idx(widget_idx)
         self.__clicks.append(video_idx)
         if len(self.__clicks) == 1:
@@ -44,23 +48,26 @@ class ThumbnailsManager:
             if self.__clicks[0] > self.__clicks[1]:
                 # Let c[1] > c[0]
                 self.__clicks.reverse()
-            # Write into label and save
-            # label_str = self.__receive_str()
-            # self.__label_utils.update(self.__clicks[0], self.__clicks[1], label_str)
-            # Unset selection border
-
         else:
             # clicks when two endpoints already set
             self.__clicks.clear()
 
         self.refresh_draw()
 
+    def handle_keypress(self, key_str: str):
+        """When keyboard pressed, if 2 thumbs were selected, update the label and clear selection."""
+        if len(self.__clicks) == 2:
+            self.__label_utils.update(self.__clicks[0], self.__clicks[1], key_str)
+            self.__clicks.clear()
+            self.refresh_draw()
+
     def refresh_draw(self):
         """Set images, labels, selection borders onto the widget"""
 
         for w_idx in range(self.num_widgets):
+            v_idx = self.__video_idx(w_idx)
             # Set images
-            img = self.__video_loader[self.__video_idx(w_idx)]
+            img = self.__video_loader[v_idx]
             if img is None:
                 self.on_EOF(w_idx)
                 continue
@@ -68,8 +75,9 @@ class ThumbnailsManager:
                 self.set_img(w_idx, img)
 
             # Set labels
-            label_str = self.__label_utils[self.__video_idx(w_idx)]
+            label_str = self.__label_utils[v_idx]
             self.set_label(w_idx, label_str)
+            self.set_sn(w_idx, v_idx)
 
             # Clear selection border
             self.set_selected(w_idx, False)
@@ -116,4 +124,7 @@ class ThumbnailsManager:
 
     def on_EOF(self, widget_idx: int):
         """Set ui response when no more image to show (end of video file)"""
+        raise NotImplementedError()
+
+    def set_sn(self, widget_idx: int, sn: int):
         raise NotImplementedError()

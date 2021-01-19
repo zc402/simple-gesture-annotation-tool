@@ -52,6 +52,7 @@ class MainW(QMainWindow):
         self.thumbs_manager.set_label = self.grids_panel.set_label
         self.thumbs_manager.set_selected = self.grids_panel.set_selected
         self.thumbs_manager.on_EOF = self.grids_panel.set_blank
+        self.thumbs_manager.set_sn = self.grids_panel.set_sn
         self.grids_panel.on_click = self.thumbs_manager.handle_click
         self.thumbs_manager.refresh_draw()
 
@@ -65,6 +66,7 @@ class MainW(QMainWindow):
             # handle ASCII char like keys
             keyString = chr(key)
             print(keyString)
+            self.thumbs_manager.handle_keypress(keyString)
 
     def wheelEvent(self, event: QWheelEvent):
 

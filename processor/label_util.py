@@ -1,6 +1,6 @@
 import csv
 from pathlib import Path
-
+import numpy as np
 import cv2
 
 
@@ -11,8 +11,8 @@ class LabelUtil:
         self.__csv_path = Path(video_path).with_suffix('.csv')
         self.__labels = self.__load()
 
-    def update(self, start, end, label_str):
-        self.__labels[start: end] = label_str
+    def update(self, first_idx, last_idx, label_str):
+        self.__labels[first_idx: last_idx + 1] = label_str
         self.__save()
         pass
 
@@ -31,14 +31,15 @@ class LabelUtil:
                 labels = list(label_reader)[0]
         else:
             # Create new csv file
-            labels = [0] * num_frames
+            labels = ['0'] * num_frames
 
         if len(labels) != num_frames:
             raise ValueError('Video contains %d frames but csv contains %d labels' % (num_frames, len(labels)))
+        labels = np.array(labels)
         return labels
 
     def __save(self):
         with open(self.__csv_path, 'w', newline='') as csv_file:
             writer = csv.writer(csv_file)
-            writer.writerow(self.__labels)
+            writer.writerow(list(self.__labels))
 

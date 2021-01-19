@@ -34,6 +34,9 @@ class GridsPanel(QWidget):
         """Set ui response when no more image to show (end of video file)"""
         self.__thumbs[widget_idx].set_blank()
 
+    def set_sn(self, widget_idx: int, sn: int):
+        self.__thumbs[widget_idx].set_sn(sn)
+
     # -----Methods need to be implemented outside
     def on_click(self, widget_idx):
         raise NotImplementedError()
