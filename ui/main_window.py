@@ -29,7 +29,7 @@ class MainW(QMainWindow):
         openFile.triggered.connect(self.__show_file_dialog)
 
         # TODO: This is a short cut for debugging
-        self.__init_grids(r'C:\Users\zc\Documents\005.mp4')
+        # self.__init_grids(r'C:\Users\zc\Documents\005.mp4')
         self.show()
 
     def __to_center(self):
@@ -63,7 +63,7 @@ class MainW(QMainWindow):
             return
         key = event.key()
         if Qt.Key_Space <= key <= Qt.Key_AsciiTilde:
-            # handle ASCII char like keys
+            # handle ASCII char-like keys
             keyString = chr(key)
             print(keyString)
             self.thumbs_manager.handle_keypress(keyString)

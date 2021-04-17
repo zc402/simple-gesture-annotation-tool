@@ -26,7 +26,7 @@ class VideoLoader:
         for f in range(self.__add_size):
             ret, frame = self.__cap.read()
             if ret:
-                frame = cv2.resize(frame, (128, 128))
+                frame = cv2.resize(frame, (160, 160))
                 self.__cached_frames.append(frame)
             else:
                 break
