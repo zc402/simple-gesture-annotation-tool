@@ -13,8 +13,8 @@ class MainW(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        self.num_row = 4
-        self.num_column = 8
+        self.num_row = 3
+        self.num_column = 6
         self.resize(512, 512)
 
         self.setWindowTitle('Center')
